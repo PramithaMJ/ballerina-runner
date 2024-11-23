@@ -1,0 +1,45 @@
+openapi: 3.0.1
+info:
+  title: Ballerina Code Execution API
+  description: This API allows clients to run Ballerina code securely within Docker containers through a Go backend service.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+    description: Development server
+paths:
+  /run:
+    post:
+      summary: Execute Ballerina code
+      description: Receives Ballerina code as plain text, executes it in a Docker container, and returns the execution output or errors.
+      requestBody:
+        description: Ballerina code to execute.
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: |
+                import ballerina/io;
+                public function main() {
+                    io:println("Hello, Ballerina!");
+                }
+      responses:
+        '200':
+          description: Successfully executed the code.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Hello, Ballerina!"
+        '400':
+          description: Invalid request (e.g., no code sent).
+        '500':
+          description: Server error or execution error.
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
