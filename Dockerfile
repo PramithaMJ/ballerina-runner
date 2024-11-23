@@ -22,7 +22,7 @@ FROM alpine:latest
 # Install Docker CLI
 RUN apk --no-cache add docker-cli
 
-# Create a non-root user and group with fixed UID/GID for better security and predictability
+# Creating a non-root user within the advised UID/GID range for better security and predictability
 RUN addgroup -g 10014 appgroup && \
     adduser -u 10014 -G appgroup -s /bin/sh -D appuser
 
@@ -38,6 +38,6 @@ WORKDIR /app
 # Expose the port the server listens on
 EXPOSE 8080
 
-# Run the server as a non-root user
-USER appuser
+# Run the server as a non-root user with an approved UID
+USER 10014
 CMD ["./server"]
