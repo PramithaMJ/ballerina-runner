@@ -22,11 +22,22 @@ FROM alpine:latest
 # Install Docker CLI
 RUN apk --no-cache add docker-cli
 
+# Create a non-root user and group with fixed UID/GID for better security and predictability
+RUN addgroup -g 10014 appgroup && \
+    adduser -u 10014 -G appgroup -s /bin/sh -D appuser
+
 # Copy the compiled Go server from the build container
-COPY --from=builder /app/server .
+COPY --from=builder /app/server /app/server
+
+# Change ownership of the application files to the non-root user
+RUN chown -R appuser:appgroup /app
+
+# Switch to the application directory as a work directory
+WORKDIR /app
 
 # Expose the port the server listens on
 EXPOSE 8080
 
-# Run the server
+# Run the server as a non-root user
+USER appuser
 CMD ["./server"]
