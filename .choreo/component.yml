@@ -1,0 +1,10 @@
+schemaVersion: 1.1
+
+endpoints:
+  - name: Ballerina Runner
+    service:
+      basePath: /
+      port: 8080
+    type: REST
+    networkVisibility: Public
+    schemaFilePath: openapi.yaml
