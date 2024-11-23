@@ -1,5 +1,5 @@
 # Use a multi-stage build to keep the final image clean and small
-FROM golang:1.22.4 as builder
+FROM golang:1.23 as builder
 
 # Set the working directory
 WORKDIR /app
